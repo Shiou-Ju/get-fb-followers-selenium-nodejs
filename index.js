@@ -2,40 +2,19 @@ require("dotenv").config("./.env");
 
 const webDriver = require("selenium-webdriver");
 const chrome = require("selenium-webdriver/chrome");
-const path = require("path");
-const fs = require("fs");
-const { setTimeout } = require("timers/promises");
+const checkDriver = require("./checkDriver");
 
-const filePath = "./chromedriver";
-const driverPath = path.join(__dirname, filePath);
+const { until, By } = webDriver;
 
-const checkDriver = () => {
-  try {
-    chrome.getDefaultService();
-  } catch (err) {
-    console.log(driverPath);
-
-    const isExistChromeDriver = fs.existsSync(driverPath);
-    if (isExistChromeDriver) {
-      const service = new chrome.ServiceBuilder(driverPath).build();
-      chrome.setDefaultService(service);
-      console.log("done setting route");
-    } else {
-      console.error("can not mount driver route");
-      return false;
-    }
-    return true;
-  }
-};
+const userName = process.env.FB_USER_NAME;
+const passWord = process.env.FB_PASS_WORD;
 
 const loginFacebook = async () => {
   const isDriverOk = checkDriver();
-  if (isDriverOk) return;
-
-  const { until, By } = webDriver;
-
-  const userName = process.env.FB_USER_NAME;
-  const passWord = process.env.FB_PASS_WORD;
+  if (!isDriverOk) {
+    console.error("exit process");
+    return;
+  }
 
   try {
     const serviceBuilder = new chrome.ServiceBuilder();
@@ -66,9 +45,22 @@ const loginFacebook = async () => {
     await pwElement.sendKeys(passWord);
 
     await loginBtn.click();
+    return driver;
   } catch (error) {
     console.error(error);
   }
 };
 
-loginFacebook();
+const goToFanPage = async (driver) => {
+  const notificationClass = `//*[contains(@class,"fzdkajry")]`;
+  await driver.wait(until.elementLocated(By.xpath(notificationClass)));
+  const fanPageUrl = "https://www.facebook.com/legal.taiwan";
+  await driver.get(fanPageUrl);
+};
+
+const main = async () => {
+  const driver = await loginFacebook();
+  await goToFanPage(driver);
+};
+
+main();
