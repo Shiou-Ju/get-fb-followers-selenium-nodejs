@@ -1,9 +1,9 @@
 require('dotenv').config('./.env');
 
-const initDriver = require('./initDriver');
-const loginFacebook = require('./loginFacebook');
-const goToFanPage = require('./goToFanPage');
-const getFollowersNumber = require('./getFollowersNumber');
+const initDriver = require('./controllers/initDriver');
+const loginFacebook = require('./controllers/loginFacebook');
+const goToFanPage = require('./controllers/goToFanPage');
+const getFollowersNumber = require('./controllers/getFollowersNumber');
 
 const importFanPages = () => {
   const fanPages = [
@@ -34,6 +34,9 @@ const main = async () => {
   }
 
   console.log(followersOfPages);
+
+  driver.sleep(3000);
+  driver.quit();
 };
 
 main();
