@@ -1,12 +1,16 @@
 require('dotenv').config('./.env');
 
-const importFanPages = require('./controllers/importFanPages')
+const preCheck = require('./controllers/preCheck');
 const initDriver = require('./controllers/initDriver');
+const importFanPages = require('./controllers/importFanPages');
 const loginFacebook = require('./controllers/loginFacebook');
 const goToFanPage = require('./controllers/goToFanPage');
 const getFollowersNumber = require('./controllers/getFollowersNumber');
 
 const main = async () => {
+  const isEnvironmentReady = await preCheck();
+  if (!isEnvironmentReady) return;
+
   const fanPages = importFanPages();
   const driver = await initDriver();
 
