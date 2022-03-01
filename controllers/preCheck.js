@@ -1,5 +1,6 @@
 require('dotenv').config('./.env');
 const checkOnline = require('is-online');
+const fs = require('fs');
 
 /**@typedef {string|number|boolean|null|undefined} env */
 
@@ -10,16 +11,26 @@ const preCheck = async () => {
     return false;
   }
 
+  const getDotEnvVariables = () => {
+    const fileContent = fs.readFileSync('./.env', 'utf-8');
+    const envArrays = fileContent.split('\n');
+    const result = envArrays.map((env) => {
+      const [splitEqual] = env.split(' =');
+      return splitEqual;
+    });
+    return result;
+  };
+
   try {
     /** @type {env[]} */
-    const envsToCheck = ['FB_USER_NAME', 'FB_PASS_WORD'];
+    const envsToCheck = getDotEnvVariables();
     checkEnv(envsToCheck);
   } catch (error) {
     console.error(error);
     return false;
   }
 
-  console.log('environment ready!')
+  console.log('environment ready!');
   return true;
 };
 
@@ -33,7 +44,7 @@ const checkEnv = (envs) => {
    * @param {env} env
    */
   envs.forEach((env) => {
-    const isExist = process.env[env];
+    const isExist = !!process.env[env];
     if (!isExist) {
       missingEnvs.push(env);
     }
