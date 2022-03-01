@@ -5,6 +5,9 @@ const { until, By } = webDriver;
 
 const goToFanPage = async (driver, fanPageUrl) => {
   const notificationClass = `//*[contains(@class,"fzdkajry")]`;
+  const intervalToReduceFetchFrequency =
+    Math.floor(Math.random() * 4 + 3) * 1000;
+  await driver.sleep(intervalToReduceFetchFrequency);
   await driver.wait(until.elementLocated(By.xpath(notificationClass)));
   await driver.get(fanPageUrl);
 };
