@@ -4,10 +4,16 @@ const webDriver = require('selenium-webdriver');
 const { until, By } = webDriver;
 
 /**
- * 
- * @param {webDriver.WebDriver} driver 
- * @param {string} fanPageName 
- * @returns 
+ * @typedef {Object} attempResult
+ * @property {string} text
+ * @property {string} className
+ */
+
+/**
+ *
+ * @param {webDriver.WebDriver} driver
+ * @param {string} fanPageName
+ * @returns
  */
 const getFollowersNumber = async (driver, fanPageName) => {
   const initResultObject = () => {
@@ -52,11 +58,45 @@ const getFollowersNumber = async (driver, fanPageName) => {
   }
 
   if (!result.followersNumber) {
-    console.log(result.followersNumber);
-    console.error(allElementsText.join('\n'));
-    throw new Error('找不到追蹤人數');
+    console.error(`所有符合的 class`, allElementsText.join('\n'));
+    const anotherAtempt = await tryFindingFollowers(driver);
+    console.log(anotherAtempt);
+
+    if (anotherAtempt) {
+      result.followersNumber = anotherAtempt.text;
+      return result;
+    } else {
+      throw new Error('找不到追蹤人數');
+    }
   }
 
+  return result;
+};
+
+/**
+ *
+ * @param {webDriver.WebDriver} driver
+ */
+const tryFindingFollowers = async (driver) => {
+  const targets = await driver.findElements(
+    By.xpath("//*[text()[contains(.,'人在追蹤')]]")
+  );
+
+  /**@type {attempResult}  */
+  const result = {};
+  for (const target of targets) {
+    const text = await target.getText();
+    const className = await target.getAttribute('class');
+
+    const textToComPare = text.replace('人在追蹤', '').replaceAll(',', '');
+
+    const isMatched = !isNaN(parseInt(textToComPare));
+
+    if (isMatched) {
+      result.className = className;
+      result.text = text;
+    }
+  }
   return result;
 };
 
