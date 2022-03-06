@@ -13,7 +13,7 @@ const goToFanPage = async (driver, fanPageUrl) => {
   const intervalToReduceFetchFrequency =
     Math.floor(Math.random() * 4 + 3) * 1000;
   await driver.sleep(intervalToReduceFetchFrequency);
-  await driver.wait(until.elementLocated(By.xpath(notificationClass)));
+  await driver.wait(until.elementLocated(By.xpath(notificationClass)), 5000);
   await driver.get(fanPageUrl);
 };
 

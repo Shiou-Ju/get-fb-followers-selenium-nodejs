@@ -8,9 +8,9 @@ const userName = process.env.FB_USER_NAME;
 const passWord = process.env.FB_PASS_WORD;
 
 /**
- * 
- * @param {webDriver.WebDriver} driver 
- * @returns 
+ *
+ * @param {webDriver.WebDriver} driver
+ * @returns
  */
 const loginFacebook = async (driver) => {
   try {
@@ -23,13 +23,13 @@ const loginFacebook = async (driver) => {
     const loginXpath = `//*[@id="loginbutton"]`;
 
     const emailElement = await driver.wait(
-      until.elementLocated(By.xpath(emailXpath))
+      until.elementLocated(By.xpath(emailXpath), 5000)
     );
     const pwElement = await driver.wait(
-      until.elementLocated(By.xpath(pwXpath))
+      until.elementLocated(By.xpath(pwXpath), 5000)
     );
     const loginBtn = await driver.wait(
-      until.elementLocated(By.xpath(loginXpath))
+      until.elementLocated(By.xpath(loginXpath), 5000)
     );
 
     await emailElement.sendKeys(userName);

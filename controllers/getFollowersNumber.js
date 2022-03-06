@@ -29,7 +29,8 @@ const getFollowersNumber = async (driver, fanPageName) => {
 
   /** @type {webDriver.WebElement[]} */
   const elementsWithSameClass = await driver.wait(
-    until.elementsLocated(By.xpath(targetClassXpath))
+    until.elementsLocated(By.xpath(targetClassXpath)),
+    5000
   );
 
   const allElementsText = [];
