@@ -7,6 +7,11 @@ const { until, By } = webDriver;
 const userName = process.env.FB_USER_NAME;
 const passWord = process.env.FB_PASS_WORD;
 
+/**
+ * 
+ * @param {webDriver.WebDriver} driver 
+ * @returns 
+ */
 const loginFacebook = async (driver) => {
   try {
     const url = 'https://www.facebook.com/login';

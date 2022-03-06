@@ -3,6 +3,12 @@ require('dotenv').config('./.env');
 const webDriver = require('selenium-webdriver');
 const { until, By } = webDriver;
 
+/**
+ * 
+ * @param {webDriver.WebDriver} driver 
+ * @param {string} fanPageName 
+ * @returns 
+ */
 const getFollowersNumber = async (driver, fanPageName) => {
   const initResultObject = () => {
     return {
