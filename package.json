@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "commander": "^9.0.0",
     "dotenv": "^16.0.0",
     "is-online": "^9.0.1",
     "selenium-webdriver": "^4.1.1"
