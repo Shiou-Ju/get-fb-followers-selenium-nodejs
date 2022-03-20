@@ -13,7 +13,9 @@ const preCheck = async () => {
 
   const getDotEnvVariables = () => {
     const fileContent = fs.readFileSync('./.env', 'utf-8');
-    const envArrays = fileContent.split('\n');
+    const envArrays = fileContent.split('\n').filter((env) => {
+      if (env.includes('=')) return true;
+    });
     const result = envArrays.map((env) => {
       const [splitEqual] = env.split(' =');
       return splitEqual;
